@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "./header/DoubleLinkList.h"
-#include "./header/CircularLinkList.h"
-#include "./header/SingleLinkList.h"
+#include "../src/DoubleLinkList.hpp"
+#include "../src/CircularLinkList.hpp"
+#include "../src/SingleLinkList.hpp"
 
 void allocateNSLL(SingleLinkList<int> &sll, int arr[], int n)
 {

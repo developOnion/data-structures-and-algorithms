@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "./header/SingleLinkList.h"
+#include "../src/SingleLinkList.hpp"
 
 // use same unshift as b1
 void addSLL(SingleLinkList<int> &sll, int val)

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "./header/DoubleLinkList.h"
+#include "../src/DoubleLinkList.hpp"
 
 void add(DoubleLinkList<int> &tray, int val);
 void remove(DoubleLinkList<int> &tray);
