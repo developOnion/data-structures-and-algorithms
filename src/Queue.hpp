@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 template <typename T>
 class Node
 {
@@ -22,11 +24,13 @@ class Queue
 private:
     Node<T> *front;
     Node<T> *rear;
+    int length;
 
 public:
     Queue()
     {
         this->front = this->rear = nullptr;
+        this->length = 0;
     }
 
     ~Queue()
@@ -41,34 +45,9 @@ public:
         }
     }
 
-    void toString()
+    int size()
     {
-        if (this->front)
-        {
-            std::cout << "Front: " << this->front->data << "\n";
-        }
-        else
-        {
-            std::cout << "Front: NULL\n";
-        }
-
-        if (this->rear)
-        {
-            std::cout << "Rear: " << this->rear->data << "\n";
-        }
-        else
-        {
-            std::cout << "Rear: NULL\n";
-        }
-
-        std::cout << "Queue: ";
-        Node<T> *curr = this->front;
-        while (curr != nullptr)
-        {
-            std::cout << curr->data << " ";
-            curr = curr->next;
-        }
-        std::cout << "\n";
+        return this->length;
     }
 
     void enqueue(T val)
@@ -84,6 +63,8 @@ public:
             this->rear->next = tmp;
             this->rear = tmp;
         }
+
+        this->length++;
     }
 
     T dequeue()
@@ -92,7 +73,7 @@ public:
 
         if (this->front == nullptr)
         {
-            std::cout << "Error: Empty Queue\n";
+            std::cout << "Queue is empty.\n";
         }
         else
         {
@@ -106,6 +87,7 @@ public:
             }
 
             delete tmp;
+            this->length--;
         }
 
         return val;
@@ -118,6 +100,6 @@ public:
 
     T peek()
     {
-        return (this->front == nullptr) ? T() : this->front->data;
+        return this->front ? this->front->data : T();
     }
 };
