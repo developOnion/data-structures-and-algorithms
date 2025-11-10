@@ -6,7 +6,7 @@ void isBalancedBracketsWithArrayStack(std::string str, int len);
 
 int main(void)
 {
-    std::string str = "{}{(})";
+    std::string str = "())) {(})";
     isBalancedBracketsWithArrayStack(str, str.size());
 
     return 0;
