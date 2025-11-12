@@ -67,7 +67,7 @@ public:
         this->length++;
     }
 
-    T dequeue() const
+    T dequeue()
     {
         T val = T();
 
