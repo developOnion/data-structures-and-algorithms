@@ -6,7 +6,10 @@ void isBalancedBracketsWithArrayStack(std::string str, int len);
 
 int main(void)
 {
-    std::string str = "())) {(})";
+    std::string str;
+    std::cout << "Enter string: ";
+    std::getline(std::cin, str);
+
     isBalancedBracketsWithArrayStack(str, str.size());
 
     return 0;
@@ -14,7 +17,7 @@ int main(void)
 
 void isBalancedBracketsWithArrayStack(std::string str, int len)
 {
-    ArrayStack<char> st((len / 2 + 1) + 1); // ArrayStack of size half len + 1
+    ArrayStack<char> st(len); // ArrayStack of size half len + 1
 
     int lastOpeningPos = 0;
     int lastClosingPos = 0;
@@ -31,7 +34,7 @@ void isBalancedBracketsWithArrayStack(std::string str, int len)
             lastOpeningPos = i + 1; // save the last opening position
             st.push(c1);
         }
-        // skip
+        // skip ''
         else if (c1 == '\'')
         {
             if (i + 1 < len)

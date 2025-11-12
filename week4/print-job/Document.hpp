@@ -21,12 +21,12 @@ public:
         this->numPages = pages;
     }
 
-    std::string getName()
+    std::string getName() const
     {
         return this->name;
     }
 
-    int getPages()
+    int getPages() const
     {
         return this->numPages;
     }

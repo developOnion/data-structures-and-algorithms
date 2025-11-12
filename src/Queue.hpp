@@ -45,12 +45,12 @@ public:
         }
     }
 
-    int size()
+    int size() const
     {
         return this->length;
     }
 
-    void enqueue(T val)
+    void enqueue(const T val)
     {
         Node<T> *tmp = new Node<T>(val);
 
@@ -67,7 +67,7 @@ public:
         this->length++;
     }
 
-    T dequeue()
+    T dequeue() const
     {
         T val = T();
 
@@ -93,12 +93,12 @@ public:
         return val;
     }
 
-    bool isEmpty()
+    bool isEmpty() const
     {
         return this->front == nullptr;
     }
 
-    T peek()
+    T peek() const
     {
         return this->front ? this->front->data : T();
     }
