@@ -17,9 +17,9 @@ int main(void)
 
 void isBalancedBracketsWithArrayStack(std::string str, int len)
 {
-    ArrayStack<char> st(len); // ArrayStack of size half len + 1
+    ArrayStack<char> st(len);
 
-    int lastOpeningPos = 0;
+    int firstOpeningPos = 0;
     int lastClosingPos = 0;
     int mismatchPos;
     bool hasMismatch = false;
@@ -31,7 +31,10 @@ void isBalancedBracketsWithArrayStack(std::string str, int len)
         // opening found -> push to stack
         if (c1 == '{' || c1 == '(' || c1 == '[')
         {
-            lastOpeningPos = i + 1; // save the last opening position
+            if (st.isEmpty())
+            {
+                firstOpeningPos = i + 1;
+            }
             st.push(c1);
         }
         // skip ''
@@ -94,13 +97,6 @@ void isBalancedBracketsWithArrayStack(std::string str, int len)
     // unclosed
     else
     {
-        int count = 0;
-        while (!st.isEmpty()) // count remaining elements in stack
-        {
-            count++;
-            st.pop();
-        }
-
-        std::cout << "Error pos=" << (lastOpeningPos - count + 1) << " reason=unclosed\n";
+        std::cout << "Error pos=" << firstOpeningPos << " reason=unclosed\n";
     }
 }

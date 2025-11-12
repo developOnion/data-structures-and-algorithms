@@ -1,7 +1,11 @@
 #pragma once
 
+#include <iostream>
+
 #include "Car.hpp"
 #include "../../src/Queue.hpp"
+
+Queue<Car> carFactoryQueue;
 
 class CarFactory
 {

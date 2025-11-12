@@ -36,18 +36,6 @@ public:
         return (this->isEmpty()) ? T() : this->stack[this->top];
     }
 
-    void toString()
-    {
-        std::cout << "Size: " << this->size << "\n";
-        std::cout << "Top: " << this->top << "\n";
-        std::cout << "Stack: ";
-        for (int i = 0; i <= this->top; ++i)
-        {
-            std::cout << this->stack[i] << " ";
-        }
-        std::cout << "\n";
-    }
-
     void push(T val)
     {
         if (this->isFull())
@@ -77,5 +65,5 @@ public:
         }
 
         return val;
-    }  
+    }
 };
