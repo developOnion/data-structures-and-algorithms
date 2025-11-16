@@ -5,7 +5,6 @@ int main(void)
 {
     CarProduction carProduction;
     initializeCarProduction(&carProduction);
-
     addOrderToProductionQueue(&carProduction, "Sedan", "Model S", "Red", 5);
     addOrderToProductionQueue(&carProduction, "SUV", "Model X", "Blue", 7);
     addOrderToProductionQueue(&carProduction, "Coupe", "Model 3", "Black", 4);
