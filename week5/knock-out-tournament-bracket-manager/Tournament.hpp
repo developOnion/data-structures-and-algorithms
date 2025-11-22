@@ -6,6 +6,8 @@ struct Node
     string matchId;
     string player;
     string winner;
+    int scoreLeft = 0;
+    int scoreRight = 0;
     Node *left = nullptr, *right = nullptr, *parent = nullptr;
     int level = -1;
     bool isLeaf() { return left == nullptr && right == nullptr; }
@@ -13,7 +15,6 @@ struct Node
 
 class Tournament
 {
-
 private:
     // assign levels to every node and record max leaf level
     void assignLevel(Node *node, int level)
@@ -21,7 +22,7 @@ private:
         node->level = level;
         if (node->isLeaf())
         {
-            this->maxLeafLevel = max(this->maxLeafLevel, level);
+            this->maxLeafLevel = level;
         }
         else
         {
@@ -36,6 +37,7 @@ private:
         queue<Node *> q;
         q.push(this->root);
         int id = 1;
+
         while (!q.empty())
         {
             Node *tmp = q.front();
@@ -43,10 +45,11 @@ private:
 
             if (!tmp->isLeaf())
             {
-                tmp->matchId = "M" + to_string(id++);
+                tmp->matchId = "M" + to_string(id);
                 this->matchMap[tmp->matchId] = tmp;
                 q.push(tmp->left);
                 q.push(tmp->right);
+                id++;
             }
         }
     }
@@ -55,10 +58,11 @@ private:
     vector<Node *> gatherLeavesLeftToRight()
     {
         vector<Node *> leaves;
-        // do an in-order traversal biased to left-to-right to get leaves left-to-right
+        // do an in order traversal leaves left to right
         gatherLeaves(root, leaves);
         return leaves;
     }
+
     void gatherLeaves(Node *n, vector<Node *> &leaves)
     {
         if (!n)
@@ -72,7 +76,7 @@ private:
         gatherLeaves(n->right, leaves);
     }
 
-    // propagate if this node can auto declare a winner (BYE rule)
+    // propagate if this node can auto declare a winner
     void propagateWinnerToParent(Node *node)
     {
         Node *curr = node->parent;
@@ -97,8 +101,8 @@ private:
             }
             else
             {
-                // both participants known? not auto: we don't auto decide between two players require recordResult
-                // but if both sides already have winners and they match names, still undecided until recordResult called
+                // if both participants known not auto: we don't auto decide between two players require recordResult
+                // but if both sides already have winners and they match names still undecided until recordResult called
             }
             curr = curr->parent;
         }
@@ -139,7 +143,7 @@ private:
                 n->winner = leftP;
             }
         }
-        // after assigning winners bottom up, propagate to parents if needed
+        // after assigning winners bottom up propagate to parents if needed
         for (Node *n : internals)
         {
             if (n->winner != "")
@@ -148,27 +152,19 @@ private:
     }
 
     // LCA computation using ancestor marking
-    Node *lowestCommonAncestor(Node *a, Node *b)
+    Node *lowestCommonAncestor(Node *parent, Node *a, Node *b)
     {
-        unordered_set<Node *> seen;
-        Node *curr = a;
+        if (parent == nullptr || parent == a || parent == b)
+            return parent;
 
-        while (curr)
-        {
-            seen.insert(curr);
-            curr = curr->parent;
-        }
+        Node *left = lowestCommonAncestor(parent->left, a, b);
+        Node *right = lowestCommonAncestor(parent->right, a, b);
 
-        curr = b;
-
-        while (curr)
-        {
-            if (seen.count(curr))
-                return curr;
-            curr = curr->parent;
-        }
-
-        return nullptr;
+        if (left == nullptr)
+            return right;
+        if (right == nullptr)
+            return left;
+        return parent;
     }
 
 public:
@@ -178,7 +174,7 @@ public:
     unordered_map<string, Node *> matchMap;
     unordered_map<string, Node *> playerLeafMap;
 
-    // helper: compute participant shown for child: if leaf -> player name, if internal -> child's winner or "?"
+    // Get participantName if
     string participantName(Node *child)
     {
         if (!child)
@@ -189,7 +185,7 @@ public:
     }
 
     // Build bracket from player list left to right
-    void buildBracket(const vector<string> &players)
+    void buildBracket(vector<string> players)
     {
         if (players.empty())
         {
@@ -256,7 +252,7 @@ public:
     }
 
     // record a result returns true if accepted, false for rejection
-    bool recordResult(const string &matchId, const string &winnerName)
+    bool recordResult(string matchId, string winnerName)
     {
         auto it = matchMap.find(matchId);
         if (it == matchMap.end())
@@ -274,10 +270,10 @@ public:
         string leftP = participantName(node->left);
         string rightP = participantName(node->right);
 
-        // BYE auto-advance check: if one is BYE and other known
+        // BYE auto advance check: if one is BYE and other known
         if (leftP == "BYE" && rightP != "?")
         {
-            // auto-advance rightP
+            // auto advance rightP
             node->winner = rightP;
             cout << "Auto-advance by BYE: " << rightP << " advanced at " << matchId << "\n";
             propagateWinnerToParent(node);
@@ -310,7 +306,7 @@ public:
     }
 
     // path to final: list matchIds from first match up to final
-    vector<Node *> pathToFinal(const string &player)
+    vector<Node *> pathToFinal(string player)
     {
         vector<Node *> res;
         auto it = playerLeafMap.find(player);
@@ -331,8 +327,7 @@ public:
         return res;
     }
 
-    // wouldMeet: returns pair<matchId, round> where round 1 is first round
-    pair<string, int> wouldMeet(const string &p1, const string &p2)
+    pair<string, int> wouldMeet(string p1, string p2)
     {
         if (playerLeafMap.find(p1) == playerLeafMap.end() || playerLeafMap.find(p2) == playerLeafMap.end())
         {
@@ -341,7 +336,7 @@ public:
 
         Node *a = playerLeafMap[p1];
         Node *b = playerLeafMap[p2];
-        Node *lca = lowestCommonAncestor(a, b);
+        Node *lca = lowestCommonAncestor(this->root, a, b);
 
         if (!lca)
             return {"", -1};
@@ -370,18 +365,18 @@ public:
         {
             int len = q.size();
 
+            // only one player
             if (maxLeafLevel == 0)
             {
-                // only one player
                 Node *only = q.front();
                 q.pop();
                 cout << "Winner: " << only->player << "\n\n";
                 break;
             }
 
+            // reached leaves
             if (currLevel == maxLeafLevel)
             {
-                // reached leaves
                 break;
             }
 

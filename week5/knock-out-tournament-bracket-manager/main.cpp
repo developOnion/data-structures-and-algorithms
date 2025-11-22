@@ -9,6 +9,10 @@ int main()
     cout << "\n\nInitial bracket:\n";
     T.printBracket();
 
+    cout << "\n\nWould meet\n";
+    pair<string, int> w = T.wouldMeet("Ronaldo", "Neymar");
+    cout << "MatchID: " << w.first << " ,Round: " << w.second << "\n";
+
     cout << "\n\nRecord result M2: Messi wons\n";
     T.recordResult("M2", "Messi");
 
