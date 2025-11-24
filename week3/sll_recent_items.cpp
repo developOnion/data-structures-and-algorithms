@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../src/SingleLinkList.hpp"
+#include "../header/SingleLinkList.hpp"
 
 void add(SingleLinkList<int> &tray, int val);
 void remove(SingleLinkList<int> &tray);

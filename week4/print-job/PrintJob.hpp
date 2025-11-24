@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../src/Queue.hpp"
+#include "../../header/Queue.hpp"
 #include "./Document.hpp"
 
 #include <iostream>
