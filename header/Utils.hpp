@@ -11,6 +11,7 @@ namespace SortingIntArr
     void selectionSort(int arr[], int length);
     void insertionSort(int arr[], int length);
     void quickSort(int arr[], int length);
+    void mergeSort(int arr[], int length);
 }
 
 namespace Printing

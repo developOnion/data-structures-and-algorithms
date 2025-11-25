@@ -93,6 +93,53 @@ namespace SortingIntArr
         std::srand(std::time(NULL));
         quickSortHelper(arr, 0, length - 1);
     }
+
+    static void mergeSortedArr(int arr[], int low, int mid, int high)
+    {
+        int leftArrLength = mid - low + 1;
+        int rightArrLength = high - mid;
+
+        int leftArr[leftArrLength];
+        int rightArr[rightArrLength];
+
+        for (int i = 0; i < leftArrLength; ++i)
+            leftArr[i] = arr[low + i];
+        for (int i = 0; i < rightArrLength; ++i)
+            rightArr[i] = arr[mid + i + 1];
+
+        int i, j, k;
+        for (i = 0, j = 0, k = low; k <= high; ++k)
+        {
+            if ((i < leftArrLength) && ((j >= rightArrLength) || (leftArr[i] <= rightArr[j])))
+            {
+                arr[k] = leftArr[i];
+                ++i;
+            }
+            else
+            {
+                arr[k] = rightArr[j];
+                ++j;
+            }
+        }
+    }
+
+    static void mergeSortHelper(int arr[], int low, int high)
+    {
+        if (low < high)
+        {
+            int mid = low + (high - low) / 2;
+
+            mergeSortHelper(arr, low, mid);
+            mergeSortHelper(arr, mid + 1, high);
+
+            mergeSortedArr(arr, low, mid, high);
+        }
+    }
+
+    void mergeSort(int arr[], int length)
+    {
+        mergeSortHelper(arr, 0, length - 1);
+    }
 }
 
 namespace Printing
