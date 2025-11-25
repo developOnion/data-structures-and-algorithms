@@ -7,7 +7,6 @@
 
 namespace SortingIntArr
 {
-    void swap(int &a, int &b);
     void bubbleSort(int arr[], int length);
     void selectionSort(int arr[], int length);
     void insertionSort(int arr[], int length);

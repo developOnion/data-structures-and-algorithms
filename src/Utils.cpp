@@ -2,7 +2,7 @@
 
 namespace SortingIntArr
 {
-    void swap(int &a, int &b)
+    static void swap(int &a, int &b)
     {
         int tmp = a;
         a = b;
@@ -21,20 +21,6 @@ namespace SortingIntArr
         }
     }
 
-    void selectionSort(int arr[], int length)
-    {
-        for (int i = 0; i < length; ++i)
-        {
-            int minIndex = i;
-            for (int j = i + 1; j < length; ++j)
-                if (arr[j] < arr[minIndex])
-                    minIndex = j;
-
-            if (minIndex != i)
-                swap(arr[i], arr[minIndex]);
-        }
-    }
-
     void insertionSort(int arr[], int length)
     {
         for (int i = 1; i < length; ++i)
@@ -50,42 +36,62 @@ namespace SortingIntArr
         }
     }
 
+    void selectionSort(int arr[], int length)
+    {
+        for (int i = 0; i < length; ++i)
+        {
+            int minIndex = i;
+            for (int j = i + 1; j < length; ++j)
+                if (arr[j] < arr[minIndex])
+                    minIndex = j;
+
+            if (minIndex != i)
+                swap(arr[i], arr[minIndex]);
+        }
+    }
+
+    /*
+        all value that is lower than pivot stays on the left side
+        of the pivot the rest are on the right side
+    */
     static int partition(int arr[], int low, int high)
     {
-        int pivotIndex = low + (std::rand() % (high - low));
-        if (pivotIndex != high)
-            swap(arr[pivotIndex], arr[high]);
+        // generate a num and swap with high so pivot is flexible
+        int randomNum = low + (std::rand() % (high - low));
+        swap(arr[randomNum], arr[high]);
 
         int pivotVal = arr[high];
-        int i = low;
-        for (int j = low; j < high; ++j)
+        int left = low;
+        for (int i = low; i < high; ++i)
         {
-            if (arr[j] <= pivotVal)
+            if (arr[i] < pivotVal)
             {
-                swap(arr[j], arr[i]);
-                i++;
+                swap(arr[i], arr[left]);
+                left++;
             }
         }
 
-        swap(arr[high], arr[i]);
+        swap(arr[left], arr[high]);
 
-        return i;
+        return left;
     }
 
+    // call quicksort recursively
     static void quickSortHelper(int arr[], int low, int high)
     {
         if (low < high)
         {
-            int pivotIndex = SortingIntArr::partition(arr, low, high);
-            SortingIntArr::quickSortHelper(arr, low, pivotIndex - 1);
-            SortingIntArr::quickSortHelper(arr, pivotIndex + 1, high);
+            int pivotIndex = partition(arr, low, high);
+            quickSortHelper(arr, low, pivotIndex - 1);
+            quickSortHelper(arr, pivotIndex + 1, high);
         }
     }
 
+    // quicksort wrapper
     void quickSort(int arr[], int length)
     {
         std::srand(std::time(NULL));
-        SortingIntArr::quickSortHelper(arr, 0, length - 1);
+        quickSortHelper(arr, 0, length - 1);
     }
 }
 
