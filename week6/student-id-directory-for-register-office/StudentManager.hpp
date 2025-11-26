@@ -86,14 +86,14 @@ private:
         if (node == nullptr)
             return nullptr;
 
-        if (node->left == nullptr && node->right == nullptr)
-        {
-            if (node == this->root)
-                this->root = nullptr;
+        // if (node->left == nullptr && node->right == nullptr && node->data.getId() == node->data.getId())
+        // {
+        //     if (node == this->root)
+        //         this->root = nullptr;
 
-            delete node;
-            return nullptr;
-        }
+        //     delete node;
+        //     return nullptr;
+        // }
 
         if (node->data.getId() > id)
             node->left = deleteStudentByIdHelper(node->left, id);
@@ -102,21 +102,54 @@ private:
         else
         {
             Node *tmp;
-            if (height(node->left) > height(node->right))
-            {
-                tmp = inorderPredecessor(node->left);
-                node->data = tmp->data;
-                node->left = deleteStudentByIdHelper(node->left, id);
+            if (node->left == nullptr && node->right == nullptr)
+            { // no child node
+                if (node == this->root)
+                    this->root = nullptr;
+
+                delete node;
+                return nullptr;
+            }
+            else if (node->right == nullptr)
+            { // only has left child
+                tmp = node->left;
+                delete node;
+                return tmp;
+            }
+            else if (node->left == nullptr)
+            { // only has right child
+                tmp = node->right;
+                delete node;
+                return tmp;
             }
             else
-            {
-                tmp = inorderSuccessor(node->right);
-                node->data = tmp->data;
-                node->right = deleteStudentByIdHelper(node->right, id);
+            { // has two children
+                if (height(node->left) > height(node->right))
+                { // left height deeper choose inorderPredecessor
+                    tmp = inorderPredecessor(node->left);
+                    node->data = tmp->data;
+                    node->left = deleteStudentByIdHelper(node->left, tmp->data.getId());
+                }
+                else
+                { // right height deeper choose inorderSuccessor
+                    tmp = inorderSuccessor(node->right);
+                    node->data = tmp->data;
+                    node->right = deleteStudentByIdHelper(node->right, tmp->data.getId());
+                }
             }
         }
 
         return node;
+    }
+
+    void freeTree(Node *node)
+    {
+        if (node == nullptr)
+            return;
+
+        freeTree(node->left);
+        delete node;
+        freeTree(node->right);
     }
 
 public:
@@ -124,6 +157,12 @@ public:
     StudentManager()
     {
         this->root = nullptr;
+    }
+
+    // deconstructor
+    ~StudentManager()
+    {
+        freeTree(this->root);
     }
 
     void addStudent(Student newStudent)
@@ -180,7 +219,7 @@ public:
     // search for inorderSuccessor of a given node
     Node *inorderSuccessor(Node *node)
     {
-        if (node->left == nullptr)
+        if (node == nullptr || node->left == nullptr)
             return node;
 
         return inorderSuccessor(node->left);

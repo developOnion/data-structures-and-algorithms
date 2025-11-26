@@ -94,6 +94,7 @@ namespace SortingIntArr
         quickSortHelper(arr, 0, length - 1);
     }
 
+    // sort left and right sub array in to an array
     static void mergeSortedArr(int arr[], int low, int mid, int high)
     {
         int leftArrLength = mid - low + 1;
@@ -123,6 +124,7 @@ namespace SortingIntArr
         }
     }
 
+    // call merge sort recursively
     static void mergeSortHelper(int arr[], int low, int high)
     {
         if (low < high)
@@ -136,6 +138,7 @@ namespace SortingIntArr
         }
     }
 
+    // merge sort wrapper
     void mergeSort(int arr[], int length)
     {
         mergeSortHelper(arr, 0, length - 1);

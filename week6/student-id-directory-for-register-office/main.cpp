@@ -38,6 +38,16 @@ int main(void)
     int idToDelete = 20250050;
     std::cout << "Delete Student with ID " << idToDelete << "\n";
     studentManager.deleteStudentById(idToDelete);
+    std::cout << "\n";
+
+    std::cout << "Inorder Traversal\n";
+    studentManager.inorderPrint();
+    std::cout << "\n";
+
+    idToDelete = 20250020;
+    std::cout << "Delete Student with ID " << idToDelete << "\n";
+    studentManager.deleteStudentById(idToDelete);
+    std::cout << "\n";
 
     std::cout << "Inorder Traversal\n";
     studentManager.inorderPrint();
