@@ -86,15 +86,6 @@ private:
         if (node == nullptr)
             return nullptr;
 
-        // if (node->left == nullptr && node->right == nullptr && node->data.getId() == node->data.getId())
-        // {
-        //     if (node == this->root)
-        //         this->root = nullptr;
-
-        //     delete node;
-        //     return nullptr;
-        // }
-
         if (node->data.getId() > id)
             node->left = deleteStudentByIdHelper(node->left, id);
         else if (node->data.getId() < id)
@@ -102,6 +93,7 @@ private:
         else
         {
             Node *tmp;
+
             if (node->left == nullptr && node->right == nullptr)
             { // no child node
                 if (node == this->root)
@@ -142,14 +134,15 @@ private:
         return node;
     }
 
+    // free all node in the tree in postorder recursive traversal
     void freeTree(Node *node)
     {
         if (node == nullptr)
             return;
 
         freeTree(node->left);
-        delete node;
         freeTree(node->right);
+        delete node;
     }
 
 public:
@@ -175,12 +168,12 @@ public:
             return;
         }
 
-        addStudentHelper(this->root, newStudent);
+        this->root = addStudentHelper(this->root, newStudent);
     }
 
     void deleteStudentById(int id)
     {
-        deleteStudentByIdHelper(this->root, id);
+        this->root = deleteStudentByIdHelper(this->root, id);
     }
 
     // search student by id
@@ -201,7 +194,10 @@ public:
     {
         if (node == nullptr)
             return 0;
+
+        // get height of the left subtree
         int l = height(node->left);
+        // get height of the right subtree
         int r = height(node->right);
 
         return (r > l) ? (r + 1) : (l + 1);
